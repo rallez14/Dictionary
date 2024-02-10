@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-public class DictionaryEntry
+﻿public class DictionaryEntry
 {
     public string Word { get; set; }
     public string PartOfSpeech { get; set; }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using Newtonsoft.Json;
-using System.Threading;
+
 
 public class Dictionary : IDictionary
 {
@@ -43,7 +39,8 @@ public class Dictionary : IDictionary
         try
         {
             WebClient webClient = new WebClient();
-            const string downloadUrl = "https://raw.githubusercontent.com/rallez14/DictionaryData/master/dictionary.json";
+            const string downloadUrl =
+                "https://raw.githubusercontent.com/rallez14/DictionaryData/master/dictionary.json";
             webClient.DownloadFile(downloadUrl, filePath);
             Console.WriteLine("Dictionary file downloaded successfully.");
             Thread.Sleep(2000);
@@ -99,6 +96,54 @@ public class Dictionary : IDictionary
         catch (Exception ex)
         {
             Console.WriteLine($"An error occurred while saving changes to the dictionary file: {ex.Message}");
+            Thread.Sleep(2000);
+        }
+    }
+
+    public void RemoveWord(string word)
+    {
+        var entriesToRemove = dictionaryEntries
+            .Where(entry => entry.Word.Equals(word, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        if (entriesToRemove.Any())
+        {
+            Console.Clear();
+            Console.WriteLine($"Found {entriesToRemove.Count} entries for the word '{word}':");
+
+            for (int i = 0; i < entriesToRemove.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. Word: {entriesToRemove[i].Word}");
+                Console.WriteLine("   Definitions:");
+
+                foreach (var definition in entriesToRemove[i].Definitions)
+                {
+                    Console.WriteLine($"    - {definition}");
+                }
+            }
+
+            Console.Write("Enter the number of the entry to remove: ");
+
+            if (int.TryParse(Console.ReadLine(), out int entryNumber) && entryNumber >= 1 &&
+                entryNumber <= entriesToRemove.Count)
+            {
+                var entryToRemove = entriesToRemove[entryNumber - 1];
+
+                dictionaryEntries.Remove(entryToRemove);
+
+                Console.WriteLine($"Word '{entryToRemove.Word}' removed successfully.");
+                SaveChanges(filePath);
+                Thread.Sleep(2000);
+            }
+            else
+            {
+                Console.WriteLine("Invalid entry number.");
+                Thread.Sleep(2000);
+            }
+        }
+        else
+        {
+            Console.WriteLine($"Word '{word}' not found in the dictionary.");
             Thread.Sleep(2000);
         }
     }

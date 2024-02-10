@@ -1,6 +1,4 @@
-﻿using System;
-
-public class UserInterface
+﻿public class UserInterface
 {
     private IDictionary dictionary;
 
@@ -18,7 +16,8 @@ public class UserInterface
             Console.WriteLine("Menu:");
             Console.WriteLine("1. Find Word");
             Console.WriteLine("2. Add Word");
-            Console.WriteLine("3. Exit");
+            Console.WriteLine("3. Remove Word");
+            Console.WriteLine("4. Exit");
 
             if (int.TryParse(Console.ReadKey().KeyChar.ToString(), out choice))
             {
@@ -31,10 +30,13 @@ public class UserInterface
                         AddWord();
                         break;
                     case 3:
+                        RemoveWord();
+                        break;
+                    case 4:
                         Console.WriteLine("Exiting the program.");
                         break;
                     default:
-                        Console.WriteLine("Invalid choice. Please enter a number between 1 and 3.");
+                        Console.WriteLine("Invalid choice. Please enter a number between 1 and 4.");
                         Thread.Sleep(2000);
                         break;
                 }
@@ -44,7 +46,7 @@ public class UserInterface
                 Console.WriteLine("Invalid input. Please enter a number.");
                 Thread.Sleep(2000);
             }
-        } while (choice != 3);
+        } while (choice != 4);
     }
 
     private void FindWord()
@@ -168,5 +170,13 @@ public class UserInterface
         {
             Console.WriteLine($"- {definition}");
         }
+    }
+
+    private void RemoveWord()
+    {
+        Console.Clear();
+        Console.Write("Enter the word to remove: ");
+        string wordToRemove = Console.ReadLine();
+        dictionary.RemoveWord(wordToRemove);
     }
 }
